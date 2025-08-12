@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Chat</class>
+ <widget class="QWidget" name="Chat">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>佛爷聊天室</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* 渐变背景 */
+    QWidget {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+    stop:0 #2c3e50, stop:1 #1a2a6c);
+    border-radius: 12px;
+    border: 1px solid #3498db;
+    }
+
+    /* 暗色模式优化 */
+    @media (prefers-color-scheme: dark) {
+    QWidget {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+    stop:0 #1a1a2e, stop:1 #16213e);
+    }
+    }</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="topBarLayout">
+     <item>
+      <widget class="QLabel" name="titleLabel">
+       <property name="styleSheet">
+        <string notr="true">font-size: 22px;
+         font-weight: bold;
+         color: white;
+         padding: 5px 10px;</string>
+       </property>
+       <property name="text">
+        <string>佛爷个聊天室</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <!-- 添加的聊天记录按钮 -->
+     <item>
+      <widget class="QPushButton" name="historyButton">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>36</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+         stop:0 #9b59b6, stop:1 #8e44ad);
+         color: white;
+         border-radius: 6px;
+         padding: 8px 15px;
+         font-size: 14px;
+         font-weight: bold;
+         border: none;
+         }
+         QPushButton:hover {
+         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+         stop:0 #8e44ad, stop:1 #7d3c98);
+         }
+         QPushButton:pressed {
+         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+         stop:0 #7d3c98, stop:1 #6c3483);
+         }</string>
+       </property>
+       <property name="text">
+        <string>查看聊天记录</string>
+       </property>
+      </widget>
+     </item>
+     <!-- 添加的聊天记录按钮结束 -->
+     <item>
+      <widget class="QLabel" name="serverIpLabel">
+       <property name="toolTip">
+        <string>当前连接的服务器IP地址</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font-size: 14px;
+         color: rgba(255, 255, 255, 0.9);
+         padding: 5px 10px;
+         border-radius: 4px;
+         background: rgba(255, 255, 255, 0.1);</string>
+       </property>
+       <property name="text">
+        <string>服务器: 127.0.0.1</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="userLabel">
+       <property name="styleSheet">
+        <string notr="true">font-size: 14px;
+         color: rgba(255, 255, 255, 0.9);
+         padding: 5px 10px;
+         border-radius: 4px;
+         background: rgba(255, 255, 255, 0.1);</string>
+       </property>
+       <property name="text">
+        <string>用户: 未登录</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="exitButton">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>36</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+         stop:0 #e74c3c, stop:1 #c0392b);
+         color: white;
+         border-radius: 6px;
+         padding: 8px 15px;
+         font-size: 14px;
+         font-weight: bold;
+         border: none;
+         }
+         QPushButton:hover {
+         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+         stop:0 #c0392b, stop:1 #a23526);
+         }
+         QPushButton:pressed {
+         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+         stop:0 #a23526, stop:1 #8a2c22);
+         }</string>
+       </property>
+       <property name="text">
+        <string>退出登录</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QFrame" name="line">
+     <property name="styleSheet">
+      <string notr="true">background: rgba(255,255,255,0.2);
+       height: 2px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::HLine</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextBrowser" name="textBrowser">
+     <property name="styleSheet">
+      <string notr="true">QTextBrowser {
+       background-color: rgba(255, 255, 255, 0.1);
+       border: 1px solid rgba(255,255,255,0.3);
+       border-radius: 10px;
+       color: white;
+       font-size: 14px;
+       padding: 10px;
+       }</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="inputLayout">
+     <item>
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="styleSheet">
+        <string notr="true">QLineEdit {
+         height: 40px;
+         border: 1px solid rgba(255,255,255,0.3);
+         border-radius: 6px;
+         padding: 0 12px;
+         background: rgba(255, 255, 255, 0.15);
+         color: white;
+         font-size: 14px;
+         }
+         QLineEdit:focus {
+         border: 1px solid #3498db;
+         }</string>
+       </property>
+       <property name="placeholderText">
+        <string>输入消息...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="sendButton">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+         stop:0 #3498db, stop:1 #2980b9);
+         color: white;
+         border-radius: 6px;
+         padding: 8px 20px;
+         font-size: 15px;
+         font-weight: bold;
+         border: none;
+         }
+         QPushButton:hover {
+         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+         stop:0 #2980b9, stop:1 #2573a7);
+         }
+         QPushButton:pressed {
+         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+         stop:0 #2573a7, stop:1 #1d6fa5);
+         }</string>
+       </property>
+       <property name="text">
+        <string>发送</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="icon/icon.qrc"/>
+ </resources>
+ <connections/>
+</ui>
