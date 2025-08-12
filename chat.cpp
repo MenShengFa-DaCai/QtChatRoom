@@ -5,25 +5,36 @@ extern bool isFirst;
 extern QString mainUser;
 extern QString mainIp;
 
-Chat::Chat(QWidget *parent) :
-    QWidget(parent), ui(new Ui::Chat) {
+// 修改构造函数以接收socket
+Chat::Chat(QTcpSocket *socket, QWidget *parent) :
+    QWidget(parent), ui(new Ui::Chat), socket(socket) {
     ui->setupUi(this);
-    //链接服务器
-    socket = new QTcpSocket(this);
-    socket->connectToHost(mainIp, 11451);
+
+    // 使用传递的socket
     ui->serverIpLabel->setText(mainIp);
     ui->userLabel->setText("用户："+mainUser);
-    //链接槽函数获取服务器发回的信息
+
+    // 链接槽函数获取服务器发回的信息
     connect(socket, SIGNAL(readyRead()), this, SLOT(readServer()));
 }
 
 Chat::~Chat() {
     delete ui;
 }
+//处理服务器响应后断开连接
+void Chat::disconnectAfterResponse() {
+    if (socket && socket->state() == QAbstractSocket::ConnectedState) {
+        socket->disconnectFromHost();
+        socket->deleteLater();
+        socket = nullptr;
+    }
+}
+
 void Chat::on_exitButton_clicked() {
     isFirst = false;
     auto *login = new Login();
     login->show();
+    disconnectAfterResponse();
     close();
 }
 //一旦收到服务器消息，调用该函数

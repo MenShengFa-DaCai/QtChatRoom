@@ -17,9 +17,11 @@ class Chat : public QWidget {
 Q_OBJECT
 
 public:
-    explicit Chat(QWidget *parent = nullptr);
+    explicit Chat(QTcpSocket *socket, QWidget *parent = nullptr);
     ~Chat() override;
-private:
+    void disconnectAfterResponse();
+
+  private:
     Ui::Chat *ui;
     QTcpSocket *socket;
     Message *msg=nullptr;

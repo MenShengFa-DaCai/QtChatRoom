@@ -148,22 +148,31 @@ void Login::readServer() {
         localDatabaseUpdates();
         mainIp=ui->serverIP->text();
         mainUser=ui->userComboBox->currentText();
-        //打开聊天窗口，关闭登陆界面
-        chat = new Chat();
+
+        // 重要修改：使用同一个socket连接进行聊天
+        chat = new Chat(tcpSocket);  // 将socket传递给聊天窗口
         chat->show();
         qDebug()<<"打开聊天";
+        //发送完账号和密码，收到服务端发来的成功或者失败的信息后发送请求断开链接
+        disconnect(tcpSocket,SIGNAL(readyRead()),this,SLOT(readServer()));
         close();
     } else if (response == "LOGIN FAILED") {
-        QMessageBox::critical(this, "登录失败", "用户名或密码错误！");
+        QMessageBox::critical(this, "登录失败", "该用户已在线，或者用户名或密码错误！");
+        // 断开连接
+        disconnectAfterResponse();
     } else if (response == "REGISTER SUCCESS") {
         QMessageBox::information(this, "注册成功", "注册成功！");
+        // 断开连接
+        disconnectAfterResponse();
     } else if (response == "REGISTER FAILED") {
         QMessageBox::critical(this, "注册失败", "该用户名已被注册！");
+        // 断开连接
+        disconnectAfterResponse();
     } else {
         QMessageBox::critical(this, "未知响应", "收到未知服务器响应: " + response);
+        // 断开连接
+        disconnectAfterResponse();
     }
-    // 断开连接
-    disconnectAfterResponse();
 }
 
 void Login::on_forgotButton_clicked() {
