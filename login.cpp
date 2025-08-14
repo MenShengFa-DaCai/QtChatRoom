@@ -149,7 +149,7 @@ void Login::readServer() {
         mainIp=ui->serverIP->text();
         mainUser=ui->userComboBox->currentText();
 
-        // 重要修改：使用同一个socket连接进行聊天
+        // 使用同一个socket连接进行聊天
         chat = new Chat(tcpSocket);  // 将socket传递给聊天窗口
         chat->show();
         qDebug()<<"打开聊天";

@@ -6,6 +6,7 @@
 #define QTCHATROOM_MESSAGE_H
 
 #include <QDialog>
+#include <QTcpSocket>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,6 +23,15 @@ public:
 
 private:
     Ui::Message* ui;
+    //套接字用来向服务器请求聊天记录
+    QTcpSocket* socket;
+    //存储可能很长的单条信息
+    QString incompleteData;
+private slots:
+    void readData();
+    void on_queryButton_clicked();
+    void on_lastButton_clicked();
+    void on_nextButton_clicked();
 };
 
 #endif // QTCHATROOM_MESSAGE_H
