@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.28)
 project(QtChatRoom)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -39,39 +39,72 @@ target_link_libraries(QtChatRoom
         Qt::Sql
 )
 
-if (WIN32 AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-    set(DEBUG_SUFFIX)
-    if (MSVC AND CMAKE_BUILD_TYPE MATCHES "Debug")
-        set(DEBUG_SUFFIX "d")
-    endif ()
-    set(QT_INSTALL_PATH "${CMAKE_PREFIX_PATH}")
-    if (NOT EXISTS "${QT_INSTALL_PATH}/bin")
-        set(QT_INSTALL_PATH "${QT_INSTALL_PATH}/..")
-        if (NOT EXISTS "${QT_INSTALL_PATH}/bin")
-            set(QT_INSTALL_PATH "${QT_INSTALL_PATH}/..")
-        endif ()
-    endif ()
-    if (EXISTS "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll")
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E make_directory
-                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/platforms/")
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT_INSTALL_PATH}/plugins/platforms/qwindows${DEBUG_SUFFIX}.dll"
-                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/platforms/")
-    endif ()
-    foreach (QT_LIB Core Gui Widgets Network Sql)
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${QT_INSTALL_PATH}/bin/Qt6${QT_LIB}${DEBUG_SUFFIX}.dll"
-                "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
-    endforeach (QT_LIB)
+# 安装目标
+install(TARGETS QtChatRoom
+        RUNTIME DESTINATION bin
+        BUNDLE DESTINATION .
+)
 
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E make_directory
-            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/sqldrivers/")
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${QT_INSTALL_PATH}/plugins/sqldrivers/qsqlite${DEBUG_SUFFIX}.dll"
-            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/sqldrivers/")
-endif ()
+# 安装运行时依赖
+if(WIN32)
+    # 安装插件目录
+    install(DIRECTORY $<TARGET_FILE_DIR:QtChatRoom>/plugins/
+            DESTINATION bin/plugins
+    )
+
+    # 安装 DLL 文件
+    install(FILES
+            "$<TARGET_FILE:Qt6::Core>"
+            "$<TARGET_FILE:Qt6::Gui>"
+            "$<TARGET_FILE:Qt6::Widgets>"
+            "$<TARGET_FILE:Qt6::Network>"
+            "$<TARGET_FILE:Qt6::Sql>"
+            DESTINATION bin
+    )
+
+    # 安装 Qt 插件
+    get_target_property(QtCore_location Qt6::Core LOCATION)
+    get_filename_component(QT_DLL_DIR "${QtCore_location}" DIRECTORY)
+
+    install(FILES
+            "${QT_DLL_DIR}/../plugins/platforms/qwindows.dll"
+            DESTINATION bin/plugins/platforms
+    )
+
+    install(FILES
+            "${QT_DLL_DIR}/../plugins/sqldrivers/qsqlite.dll"
+            DESTINATION bin/plugins/sqldrivers
+    )
+endif()
+
+# CPack 配置
+set(CPACK_GENERATOR "NSIS")
+set(CPACK_PACKAGE_NAME "QtChatRoom")
+set(CPACK_PACKAGE_VENDOR "YourCompany")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Qt Chat Room Application")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "QtChatRoom")
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+set(CPACK_NSIS_MODIFY_PATH OFF)
+
+# 设置安装包图标
+set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/icon/install.ico")
+set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/icon/uninstall.ico")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\QtChatRoom.exe")
+set(CPACK_NSIS_DISPLAY_NAME "Qt Chat Room")
+set(CPACK_NSIS_PACKAGE_NAME "Qt Chat Room")
+
+# 创建桌面快捷方式
+set(CPACK_NSIS_CREATE_ICONS_EXTRA "
+  CreateShortCut '$DESKTOP\\\\QtChatRoom.lnk' '$INSTDIR\\\\bin\\\\QtChatRoom.exe'
+")
+set(CPACK_NSIS_DELETE_ICONS_EXTRA "
+  Delete '$DESKTOP\\\\QtChatRoom.lnk'
+")
+
+# 开始菜单快捷方式
+set(CPACK_NSIS_MENU_LINKS
+        "bin/QtChatRoom.exe" "Qt Chat Room"
+)
+
+include(CPack)

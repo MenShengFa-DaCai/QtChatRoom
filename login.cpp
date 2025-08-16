@@ -18,7 +18,7 @@ Login::Login(QWidget *parent) :
     ui->serverIP->setText(lastServerIP);
     if(userData.open()) {
         //qDebug记得注释掉
-        qDebug()<<"open";
+        // qDebug()<<"open";
         //创建表
         // 检查USERS表是否已存在
         //数据库操作函数
@@ -152,7 +152,7 @@ void Login::readServer() {
         // 使用同一个socket连接进行聊天
         chat = new Chat(tcpSocket);  // 将socket传递给聊天窗口
         chat->show();
-        qDebug()<<"打开聊天";
+        // qDebug()<<"打开聊天";
         //发送完账号和密码，收到服务端发来的成功或者失败的信息后发送请求断开链接
         disconnect(tcpSocket,SIGNAL(readyRead()),this,SLOT(readServer()));
         close();
@@ -185,7 +185,7 @@ void Login::changeUser(int) {
     query.prepare("SELECT * FROM USERS WHERE id=?;");
     query.bindValue(0, ui->userComboBox->currentText());
     if (query.exec()) {
-        qDebug()<<"查询指令完成";
+        // qDebug()<<"查询指令完成";
         if (query.next()) {
             ui->rememberCheck->setChecked(query.value(3).toBool());
             ui->autoLoginCheck->setChecked(query.value(2).toBool());
@@ -195,7 +195,7 @@ void Login::changeUser(int) {
                 ui->passwordEdit->setText("");
             }
         }else {
-            qDebug()<< "数据库里没有？";
+            // qDebug()<< "数据库里没有？";
         }
     }
 }
@@ -218,7 +218,7 @@ void Login::checkLocalDatabase() {
     if (checkQuery.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='USERS';")) {
         if (checkQuery.next()) {
             // 表已存在，直接打开
-            qDebug()<<"check";
+            // qDebug()<<"check";
             //打开表的情况下，寻找数据库中所有记录的账号，在userComboBox的表中列出
             //另外，如果有账号勾选了记住密码，数据库中记录的密码应填入passwordEdit
             //如果上次登陆勾选了自动登陆，则判断是否为主动退出登陆，如果不是则自动登陆账号
@@ -249,7 +249,7 @@ void Login::checkLocalDatabase() {
                     QSqlQuery clearAuto;
                     clearAuto.prepare("UPDATE USERS SET automatic = 0;");
                     if (clearAuto.exec()) {
-                        qDebug()<<"clearAuto";
+                        // qDebug()<<"clearAuto";
                     }
                     ui->autoLoginCheck->setChecked(true);
                     ui->loginButton->click();
@@ -257,7 +257,7 @@ void Login::checkLocalDatabase() {
                     QSqlQuery clearAuto;
                     clearAuto.prepare("UPDATE USERS SET automatic = 0;");
                     if (clearAuto.exec()) {
-                        qDebug()<<"clearAuto";
+                        // qDebug()<<"clearAuto";
                     }
                 }
             }else {
@@ -283,15 +283,15 @@ void Login::checkLocalDatabase() {
             QSqlQuery createQuery;
             if (createQuery.exec(createSql)) {
                 //建表完成
-                qDebug()<<"create";
+                // qDebug()<<"create";
             } else {
                 //建表失败
-                qDebug()<<"failed";
+                // qDebug()<<"failed";
             }
         }
     } else {
         //检查语句执行失败
-        qDebug()<<"数据库检查失败";
+        // qDebug()<<"数据库检查失败";
     }
 }
 
@@ -307,9 +307,9 @@ void Login::localDatabaseUpdates() {
     query.bindValue(3,ui->autoLoginCheck->isChecked());
     //执行命令
     if (query.exec()) {
-        qDebug()<<"已将账号信息加入数据库";
+        // qDebug()<<"已将账号信息加入数据库";
     }else {
-        qDebug()<<"添加命令执行失败";
+        // qDebug()<<"添加命令执行失败";
         //到这里大概就是数据库中已经存在，所以更新数据
         query.clear();
         query.prepare("UPDATE USERS SET passport=?, automatic=?, remember=? WHERE id=?");
@@ -320,9 +320,9 @@ void Login::localDatabaseUpdates() {
         //执行命令
         if (query.exec()) {
             //更新成功
-            qDebug()<<"更新成功";
+            // qDebug()<<"更新成功";
         }else {
-            qDebug()<<"更新失败";
+            // qDebug()<<"更新失败";
         }
     }
 }
