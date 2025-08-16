@@ -96,13 +96,15 @@ void Message::on_queryButton_clicked() {
     highlightFormat.setBackground(Qt::yellow);
     highlightFormat.setForeground(Qt::black);
 
+    QTextDocument::FindFlags flags = QTextDocument::FindCaseSensitively;
+
     // 查找所有匹配项
     while (!cursor.isNull() && !cursor.atEnd()) {
-        cursor = doc->find(keyword, cursor, QTextDocument::FindWholeWords | QTextDocument::FindCaseSensitively);
+        cursor = doc->find(keyword, cursor, flags);
 
         if (!cursor.isNull()) {
             searchResults.append(cursor);
-            cursor.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
+            // cursor.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
         }
     }
 
