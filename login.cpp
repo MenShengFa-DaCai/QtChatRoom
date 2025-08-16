@@ -10,8 +10,9 @@ Login::Login(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint);
     //寻找数据库中所有记录的账号，在userComboBox的表中列出
     //创建数据库
+    QString dbPath = QCoreApplication::applicationDirPath() + "/LocalUsers.db";
     userData=QSqlDatabase::addDatabase("QSQLITE");
-    userData.setDatabaseName("LocalUsers.db");
+    userData.setDatabaseName(dbPath);
     // 读取上次保存的服务器IP
     QSettings settings("QtChatRoom.ini", QSettings::IniFormat);
     QString lastServerIP = settings.value("Server/IP", "127.0.0.1").toString();
@@ -142,7 +143,7 @@ void Login::readServer() {
     if (response == "LOGIN SUCCESS") {
         QMessageBox::information(this, "登录成功", "登录成功！");
         // 保存服务器IP
-        QSettings settings("QtChatRoom.ini", QSettings::IniFormat);
+        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QtChatRoom", "QtChatRoom");
         settings.setValue("Server/IP", ui->serverIP->text());
         //数据库更新
         localDatabaseUpdates();
