@@ -10,7 +10,6 @@ int main(int argc, char* argv[]) {
     QApplication::addLibraryPath(QCoreApplication::applicationDirPath() + "/plugins");
     QApplication a(argc, argv);
     qputenv("QT_PLUGIN_PATH", QCoreApplication::applicationDirPath().toUtf8() + "/plugins");
-
     auto *login = new Login();
     login->show();
     return QApplication::exec();

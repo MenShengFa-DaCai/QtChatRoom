@@ -397,7 +397,7 @@
      </property>
     </spacer>
    </item>
-   <item row="5" column="0">
+   <item row="8" column="1">
     <widget class="QLineEdit" name="serverIP">
      <property name="styleSheet">
       <string notr="true">QLineEdit {
@@ -414,7 +414,7 @@
                             }</string>
      </property>
      <property name="placeholderText">
-      <string>请输入服务器IP</string>
+      <string>请输入 服务器IP:端口号</string>
      </property>
     </widget>
    </item>

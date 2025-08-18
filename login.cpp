@@ -70,7 +70,8 @@ void Login::on_loginButton_clicked() {
     connect(tcpSocket,SIGNAL(errorOccurred(QAbstractSocket::SocketError)),
         this,SLOT(connectError(QAbstractSocket::SocketError)));
     connect(tcpSocket,SIGNAL(connected()),this,SLOT(connectLongin()));
-    tcpSocket->connectToHost(ui->serverIP->text(), 11451);
+    QStringList order=ui->serverIP->text().split(":");
+    tcpSocket->connectToHost(order[0], order[1].toInt());
 }
 //注册按钮按下，处理注册逻辑
 void Login::on_registerButton_clicked() {
@@ -84,7 +85,8 @@ void Login::on_registerButton_clicked() {
     connect(tcpSocket,SIGNAL(errorOccurred(QAbstractSocket::SocketError)),
         this,SLOT(connectError(QAbstractSocket::SocketError)));
     connect(tcpSocket,SIGNAL(connected()),this,SLOT(connectRegister()));
-    tcpSocket->connectToHost(ui->serverIP->text(), 11451);
+    QStringList order=ui->serverIP->text().split(":");
+    tcpSocket->connectToHost(order[0], order[1].toInt());
 }
 
 //连接失败（包括注册和登陆）
