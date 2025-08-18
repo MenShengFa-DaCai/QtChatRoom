@@ -175,7 +175,7 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/LocalUsers.db"
 
 # ========== CPack 打包配置 ==========
 set(CPACK_PACKAGE_NAME "QtChatRoom")
-set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_VERSION "1.0.1")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "聊天室客户端程序")
 set(CPACK_PACKAGE_VENDOR "Your Name")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "QtChatRoom")
