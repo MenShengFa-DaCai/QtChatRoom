@@ -71,6 +71,10 @@ void Login::on_loginButton_clicked() {
         this,SLOT(connectError(QAbstractSocket::SocketError)));
     connect(tcpSocket,SIGNAL(connected()),this,SLOT(connectLongin()));
     QStringList order=ui->serverIP->text().split(":");
+    if (order.length()<2) {
+        QMessageBox::critical(this,tcpSocket->errorString(),"请按格式输入服务器和端口号！");
+        return;
+    }
     tcpSocket->connectToHost(order[0], order[1].toInt());
 }
 //注册按钮按下，处理注册逻辑
@@ -86,6 +90,10 @@ void Login::on_registerButton_clicked() {
         this,SLOT(connectError(QAbstractSocket::SocketError)));
     connect(tcpSocket,SIGNAL(connected()),this,SLOT(connectRegister()));
     QStringList order=ui->serverIP->text().split(":");
+    if (order.length()<2) {
+        QMessageBox::critical(this,tcpSocket->errorString(),"请按格式输入服务器和端口号！");
+        return;
+    }
     tcpSocket->connectToHost(order[0], order[1].toInt());
 }
 
