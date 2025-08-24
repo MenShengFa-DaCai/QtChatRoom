@@ -152,8 +152,8 @@ void Login::readServer() {
     // 根据响应类型处理
     if (response == "LOGIN SUCCESS") {
         QMessageBox::information(this, "登录成功", "登录成功！");
-        // 保存服务器IP
-        QSettings settings(QSettings::IniFormat, QSettings::UserScope, "QtChatRoom", "QtChatRoom");
+        // 保存服务器IP - 修改这里
+        QSettings settings("QtChatRoom.ini", QSettings::IniFormat);
         settings.setValue("Server/IP", ui->serverIP->text());
         //数据库更新
         localDatabaseUpdates();
