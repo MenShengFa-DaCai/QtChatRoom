@@ -6,7 +6,8 @@ Message::Message(QWidget* parent) : QDialog(parent), ui(new Ui::Message) {
     ui->setupUi(this);
     //套接字链接服务器
     socket = new QTcpSocket();
-    socket->connectToHost(mainIp, 11451);
+    QStringList order=mainIp.split(":");
+    socket->connectToHost(order[0], order[1].toInt());
     // 发消息给服务器，请求聊天记录
     QTextStream out(socket);
     //链接收到消息的槽函数
@@ -101,7 +102,6 @@ void Message::on_queryButton_clicked() {
     // 查找所有匹配项
     while (!cursor.isNull() && !cursor.atEnd()) {
         cursor = doc->find(keyword, cursor, flags);
-
         if (!cursor.isNull()) {
             searchResults.append(cursor);
             // cursor.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
